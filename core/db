@@ -1,1 +1,14 @@
-Hoje eu to gravando a aula 2.1!
+{
+  "todos": [
+    {
+      "date": "2023-10-30T12:36:41.375Z",
+      "content": "Primeira TODO",
+      "done": false
+    },
+    {
+      "date": "2023-10-30T12:36:41.376Z",
+      "content": "Segunda TODO",
+      "done": false
+    }
+  ]
+}
