@@ -85,4 +85,3 @@ update(segundaTodo.id, {
   done: true,
 });
 updateContentById(segundaTodo.id, "Atualizada");
-console.log(read());
