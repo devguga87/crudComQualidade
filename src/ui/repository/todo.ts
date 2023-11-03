@@ -22,9 +22,9 @@ function get({
       const paginatedTodos = ALL_TODOS.slice(startIndex, endIndex);
       const totalPages = Math.ceil(ALL_TODOS.length / limit);
       return {
-        todos: ALL_TODOS,
+        todos: paginatedTodos,
         total: ALL_TODOS.length,
-        pages: 1,
+        pages: totalPages,
       };
     }
   );
