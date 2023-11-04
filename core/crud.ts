@@ -79,6 +79,7 @@ DB_CLEAR();
 const primeiraTodo = create("Primeira TODO");
 const segundaTodo = create("Segunda TODO");
 const thirdTodo = create("Terceira TODO");
+const quartaTodo = create("Quarta TODO");
 deleteById(primeiraTodo.id);
 update(segundaTodo.id, {
   content: "Atualizada",
