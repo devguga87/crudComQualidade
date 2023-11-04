@@ -13,18 +13,15 @@ function get({
   page,
   limit,
 }: TodoRepositoryGetParams): Promise<TodoRepositoryGetOutput> {
-  return fetch("http://localhost:3000/api/todos").then(
+  return fetch(`/api/todos?page=${page}&limit=${limit}`).then(
     async (respostaDoServidor) => {
-      const todos = await respostaDoServidor.json();
-      const ALL_TODOS = todos;
-      const startIndex = (page - 1) * limit;
-      const endIndex = page * limit;
-      const paginatedTodos = ALL_TODOS.slice(startIndex, endIndex);
-      const totalPages = Math.ceil(ALL_TODOS.length / limit);
+      const todosString = await respostaDoServidor.text();
+      const responseParsed = parseTodosFromServer(JSON.parse(todosString));
+
       return {
-        todos: paginatedTodos,
-        total: ALL_TODOS.length,
-        pages: totalPages,
+        todos: responseParsed.todos,
+        total: responseParsed.total,
+        pages: responseParsed.pages,
       };
     }
   );
@@ -40,4 +37,44 @@ interface Todo {
   content: string;
   date: Date;
   done: boolean;
+}
+
+function parseTodosFromServer(responseBody: unknown): {
+  total: number;
+  pages: number;
+  todos: Array<Todo>;
+} {
+  if (
+    responseBody !== null &&
+    typeof responseBody === "object" &&
+    "todos" in responseBody &&
+    "total" in responseBody &&
+    "pages" in responseBody &&
+    Array.isArray(responseBody.todos)
+  ) {
+    return {
+      total: Number(responseBody.total),
+      pages: Number(responseBody.pages),
+      todos: responseBody.todos.map((todo) => {
+        if (todo == null && typeof todo !== "object") {
+          throw new Error("Invalid todo from API");
+        }
+
+        const { id, content, date, done } = todo as Todo;
+
+        return {
+          id,
+          content,
+          done,
+          date,
+        };
+      }),
+    };
+  }
+
+  return {
+    todos: [],
+    pages: 1,
+    total: 0,
+  };
 }
