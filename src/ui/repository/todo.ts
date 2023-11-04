@@ -15,8 +15,11 @@ function get({
 }: TodoRepositoryGetParams): Promise<TodoRepositoryGetOutput> {
   return fetch("http://localhost:3000/api/todos").then(
     async (respostaDoServidor) => {
-      const todos = await respostaDoServidor.json();
-      const ALL_TODOS = todos;
+      const todosString = await respostaDoServidor.text();
+      const todosFromServer = parseTodosFromServer(
+        JSON.parse(todosString)
+      ).todos;
+      const ALL_TODOS = todosFromServer;
       const startIndex = (page - 1) * limit;
       const endIndex = page * limit;
       const paginatedTodos = ALL_TODOS.slice(startIndex, endIndex);
@@ -40,4 +43,34 @@ interface Todo {
   content: string;
   date: Date;
   done: boolean;
+}
+
+function parseTodosFromServer(responseBody: unknown): { todos: Array<Todo> } {
+  if (
+    responseBody !== null &&
+    typeof responseBody === "object" &&
+    "todos" in responseBody &&
+    Array.isArray(responseBody.todos)
+  ) {
+    return {
+      todos: responseBody.todos.map((todo) => {
+        if (todo == null && typeof todo !== "object") {
+          throw new Error("Invalid todo from API");
+        }
+
+        const { id, content, date, done } = todo as Todo;
+
+        return {
+          id,
+          content,
+          done,
+          date,
+        };
+      }),
+    };
+  }
+
+  return {
+    todos: [],
+  };
 }
