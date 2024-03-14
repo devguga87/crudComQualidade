@@ -1,1 +1,14 @@
-First create!
+{
+  "todos": [
+    {
+      "date": "2024-03-14T13:16:54.322Z",
+      "content": "First create!",
+      "done": false
+    },
+    {
+      "date": "2024-03-14T13:16:54.322Z",
+      "content": "Segunda Todo",
+      "done": false
+    }
+  ]
+}
