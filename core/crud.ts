@@ -2,8 +2,6 @@ import fs from "fs";
 import { v4 as uuid } from "uuid";
 const DB_FILE_PATH = "./core/db";
 
-console.log("[CRUD]");
-
 type UUID = string;
 
 interface Todo {
@@ -26,7 +24,7 @@ function create(content: string): Todo {
   return todo;
 }
 
-function read(): Array<Todo> {
+export function read(): Array<Todo> {
   const dbString = fs.readFileSync(DB_FILE_PATH, "utf-8");
   const db = JSON.parse(dbString || "{}");
   if (!db.todos) {
@@ -68,13 +66,12 @@ function CLEAR_DB() {
 }
 
 //[SIMULATION]
-CLEAR_DB();
-const todo1 = create("First create!");
-const todo2 = create("Segunda Todo");
-const todo3 = create("Terceira Todo");
-updateById(todo2.id, {
-  content: "Segunda editada",
-  done: true,
-});
-deleteById(todo1.id);
-console.log(read());
+// CLEAR_DB();
+// const todo1 = create("First create!");
+// const todo2 = create("Segunda Todo");
+// const todo3 = create("Terceira Todo");
+// updateById(todo2.id, {
+//   content: "Segunda editada",
+//   done: true,
+// });
+// deleteById(todo1.id);
